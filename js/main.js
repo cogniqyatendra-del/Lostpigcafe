@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sendChatBtn = document.querySelector(".chat-input #send-btn"); // Specific selector
         const clearChatBtn = document.querySelector("#clear-chat-btn");
 
-        const API_KEY = "AIzaSyBhcgjnZiYdZVNhKHOKpHkF12QQ0Dn1DO8";
+        const API_KEY = "AIzaSyBnBlWmViEYYATMh5KJeTg8o0L7g3aUWHs";
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
         
         const SYSTEM_INSTRUCTION = `
