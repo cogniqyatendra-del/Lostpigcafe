@@ -1,0 +1,447 @@
+/* ============= GIFT CARDS PAGE STYLES ============= */
+
+/* Gift Hero Section */
+.gift-hero {
+    min-height: calc(100vh - 100px);
+    background: #f8f8f4;
+    display: flex;
+    align-items: center;
+    padding: 80px 60px;
+}
+
+.gift-hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.gift-hero-content {
+    padding-right: 40px;
+}
+
+.gift-hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 52px);
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+    margin-bottom: 25px;
+}
+
+.gift-hero-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.gift-hero-tagline {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    font-style: italic;
+    color: #1a1a1a;
+    margin-bottom: 35px;
+}
+
+.gift-purchase-btn {
+    background: #1a1a1a;
+    color: white;
+    padding: 16px 35px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.gift-purchase-btn:hover {
+    background: #205432;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(32, 84, 50, 0.4);
+}
+
+.gift-hero-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gift-hero-image img {
+    max-width: 100%;
+    height: auto;
+    max-height: 450px;
+    object-fit: contain;
+}
+
+/* ============= GIFT MODAL STYLES ============= */
+.gift-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.gift-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.gift-modal {
+    background: white;
+    border-radius: 12px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.gift-modal-overlay.active .gift-modal {
+    transform: scale(1);
+}
+
+.gift-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: #999;
+    cursor: pointer;
+    z-index: 10;
+    transition: color 0.3s ease;
+}
+
+.gift-modal-close:hover {
+    color: #333;
+}
+
+.gift-modal-content {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+}
+
+.gift-modal-left {
+    background: #f8f8f4;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px 0 0 12px;
+}
+
+.gift-modal-logo {
+    max-width: 200px;
+    height: auto;
+}
+
+.gift-modal-right {
+    padding: 40px;
+}
+
+.gift-modal-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.gift-modal-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #888;
+    margin-bottom: 30px;
+}
+
+/* Form Styles */
+.gift-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-label.required::before {
+    content: '* ';
+    color: #205432;
+}
+
+/* Amount Buttons */
+.amount-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.amount-btn {
+    padding: 12px 20px;
+    border: 1px solid #ddd;
+    background: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.amount-btn:hover {
+    border-color: #205432;
+}
+
+.amount-btn.active {
+    border-color: #205432;
+    background: #f0f7f2;
+    color: #205432;
+}
+
+.custom-amount {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.currency-prefix {
+    padding: 12px 15px;
+    background: #f5f5f5;
+    border-right: 1px solid #ddd;
+    font-family: 'Inter', sans-serif;
+    color: #666;
+}
+
+.custom-amount input {
+    flex: 1;
+    border: none;
+    padding: 12px 15px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+}
+
+/* Delivery Options */
+.delivery-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #555;
+}
+
+.radio-option input[type="radio"] {
+    display: none;
+}
+
+.radio-custom {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    position: relative;
+    transition: border-color 0.3s ease;
+}
+
+.radio-option input[type="radio"]:checked+.radio-custom {
+    border-color: #205432;
+}
+
+.radio-option input[type="radio"]:checked+.radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    background: #205432;
+    border-radius: 50%;
+}
+
+.email-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.email-inputs input,
+.personalize-inputs input {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.email-inputs input:focus,
+.personalize-inputs input:focus,
+.gift-form textarea:focus {
+    border-color: #205432;
+}
+
+/* Date Buttons */
+.date-buttons {
+    display: flex;
+}
+
+.date-btn {
+    padding: 12px 30px;
+    border: 1px solid #ddd;
+    background: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.date-btn:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.date-btn:last-child {
+    border-radius: 0 4px 4px 0;
+    border-left: none;
+}
+
+.date-btn.active {
+    background: #205432;
+    color: white;
+    border-color: #205432;
+}
+
+.date-note {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #888;
+    margin: 0;
+}
+
+/* Personalization */
+.personalize-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.gift-form textarea {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.3s ease;
+}
+
+/* Submit Button */
+.gift-submit-btn {
+    background: #205432;
+    color: white;
+    padding: 16px 30px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.gift-submit-btn:hover {
+    background: #2d6b43;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(32, 84, 50, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .gift-hero-container {
+        grid-template-columns: 1fr;
+        gap: 50px;
+        text-align: center;
+    }
+
+    .gift-hero-content {
+        padding-right: 0;
+    }
+
+    .gift-hero {
+        padding: 60px 40px;
+    }
+
+    .gift-modal-content {
+        grid-template-columns: 1fr;
+    }
+
+    .gift-modal-left {
+        border-radius: 12px 12px 0 0;
+        padding: 30px;
+    }
+
+    .gift-modal-logo {
+        max-width: 150px;
+    }
+}
+
+@media (max-width: 576px) {
+    .gift-hero {
+        padding: 40px 20px;
+    }
+
+    .gift-modal-right {
+        padding: 25px;
+    }
+
+    .email-inputs,
+    .personalize-inputs {
+        grid-template-columns: 1fr;
+    }
+
+    .amount-buttons {
+        justify-content: center;
+    }
+}

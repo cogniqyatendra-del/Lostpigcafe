@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gift Cards | Lost Pig Cafe</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+   <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ============= TOP WHITE NAVBAR ============= -->
+    <div class="top-nav container-fluid">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <div class="left-links">
+                <a href="index.html">HOME</a>
+                <a href="index.html#about">ABOUT</a>
+                <a href="menu.html">MENU</a>
+                <a href="gift-cards.html" class="active-link">GIFT CARDS</a>
+                <a href="index.html#catering">CATERING</a>
+                <a href="index.html#contact">CONTACT</a>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- ============= GIFT CARDS HERO ============= -->
+    <section class="gift-hero">
+        <div class="gift-hero-container">
+            <div class="gift-hero-content">
+                <h1 class="gift-hero-title">Because who doesn't love breakfast?</h1>
+                <p class="gift-hero-text">
+                    Lost Pig Cafe gift cards never expire and can be purchased in any amount. 
+                    They work in store & online at lostpigcafe.com.
+                </p>
+                <p class="gift-hero-tagline"><em>AKA they're the perfect gift.</em></p>
+                <button class="gift-purchase-btn" id="openGiftModal">PURCHASE GIFT CARD</button>
+            </div>
+            <div class="gift-hero-image">
+                <img src="images/gift-card.webp" alt="Lost Pig Cafe Gift Card">
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============= GIFT CARD PURCHASE MODAL ============= -->
+    <div class="gift-modal-overlay" id="giftModalOverlay">
+        <div class="gift-modal">
+            <button class="gift-modal-close" id="closeGiftModal">&times;</button>
+            
+            <div class="gift-modal-content">
+                <div class="gift-modal-left">
+                    <img src="images/logo.png" alt="Lost Pig Cafe Logo" class="gift-modal-logo">
+                </div>
+                
+                <div class="gift-modal-right">
+                    <h2 class="gift-modal-title">Lost Pig Gift Card</h2>
+                    <p class="gift-modal-subtitle">
+                        Lost Pig Cafe gift cards never expire and can be purchased in any amount. 
+                        They work in store & online. AKA they're the perfect gift.
+                    </p>
+
+                    <form class="gift-form" id="giftCardForm">
+                        <!-- Gift Amount -->
+                        <div class="form-section">
+                            <label class="form-label required">Gift Amount</label>
+                            <div class="amount-buttons">
+                                <button type="button" class="amount-btn active" data-amount="25">$25.00</button>
+                                <button type="button" class="amount-btn" data-amount="50">$50.00</button>
+                                <button type="button" class="amount-btn" data-amount="100">$100.00</button>
+                                <button type="button" class="amount-btn" data-amount="200">$200.00</button>
+                            </div>
+                            <div class="custom-amount">
+                                <span class="currency-prefix">$</span>
+                                <input type="number" placeholder="Customize amount ($5.00 - $500.00)" min="5" max="500" id="customAmount">
+                            </div>
+                        </div>
+
+                        <!-- Delivery Options -->
+                        <div class="form-section">
+                            <label class="form-label required">Delivery Options</label>
+                            <div class="delivery-options">
+                                <label class="radio-option">
+                                    <input type="radio" name="delivery" value="email" checked>
+                                    <span class="radio-custom"></span>
+                                    Send this card via <strong>Email</strong>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="delivery" value="text">
+                                    <span class="radio-custom"></span>
+                                    Send this card via <strong>Text</strong>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="delivery" value="self">
+                                    <span class="radio-custom"></span>
+                                    Send this card <strong>To Me</strong> first
+                                </label>
+                            </div>
+                            <div class="email-inputs">
+                                <input type="email" placeholder="Recipient email" required>
+                                <input type="email" placeholder="Confirm email" required>
+                            </div>
+                        </div>
+
+                        <!-- Delivery Date -->
+                        <div class="form-section">
+                            <label class="form-label required">Delivery Date and Time</label>
+                            <div class="date-buttons">
+                                <button type="button" class="date-btn active">Today</button>
+                                <button type="button" class="date-btn">Later</button>
+                            </div>
+                            <p class="date-note">We'll send the digital card immediately after you complete the order.</p>
+                        </div>
+
+                        <!-- Personalization -->
+                        <div class="form-section">
+                            <label class="form-label">Personalize Your Card</label>
+                            <div class="personalize-inputs">
+                                <input type="text" placeholder="Recipient's Name">
+                                <input type="text" placeholder="Sender's Name">
+                            </div>
+                            <textarea placeholder="Add a custom message up to 255 characters." maxlength="255"></textarea>
+                        </div>
+
+                        <!-- Submit -->
+                        <button type="submit" class="gift-submit-btn">ADD TO CART - $25.00</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ============= FOOTER SECTION ============= -->
+    <footer class="footer-section">
+        <div class="footer-container">
+            <!-- Logo & About -->
+            <div class="footer-col">
+                <img src="images/logo.png" alt="Lost Pig Cafe" class="footer-logo">
+                <p class="footer-about">
+                    Your destination for farm-fresh breakfast, artisan coffee, and handcrafted baked goods in Sonoma.
+                </p>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/lostpigcafe" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/LostPigCafe" target="_blank" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-col">
+                <h4 class="footer-title">QUICK LINKS</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#">Menu</a></li>
+                    <li><a href="#">Catering</a></li>
+                    <li><a href="gift-cards.html">Gift Cards</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="footer-col">
+                <h4 class="footer-title">CONTACT US</h4>
+                <ul class="footer-contact">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>22718 Broadway Ave, Sonoma, CA 95476, United States</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:+17079351555">(707) 935-1555</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:lostpigcafe@gmail.com">lostpigcafe@gmail.com</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Opening Hours -->
+            <div class="footer-col">
+                <h4 class="footer-title">OPENING HOURS</h4>
+                <ul class="footer-hours">
+                    <li><span>Monday - Friday</span> <span>7:00 AM - 3:00 PM</span></li>
+                    <li><span>Saturday - Sunday</span> <span>8:00 AM - 4:00 PM</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p>&copy; 2024 Lost Pig Cafe. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+
+    <!-- BOOTSTRAP JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Main Script -->
+    <script src="js/main.js"></script>
+</body>
+</html>
