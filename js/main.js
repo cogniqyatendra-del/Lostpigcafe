@@ -39,6 +39,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    
+    /* ============= MOBILE MENU LOGIC ============= */
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+    const mobileMenuClose = document.getElementById('mobileMenuClose');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+             mobileSidebar.classList.add('active');
+             mobileMenuOverlay.classList.add('active');
+             document.body.style.overflow = 'hidden';
+        });
+    }
+
+    const closeMobileMenu = () => {
+        mobileSidebar.classList.remove('active');
+        mobileMenuOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    if (mobileMenuClose) {
+        mobileMenuClose.addEventListener('click', closeMobileMenu);
+    }
+
+    if (mobileMenuOverlay) {
+        mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+    }
+
+    if (mobileLinks) {
+         mobileLinks.forEach(link => {
+             link.addEventListener('click', closeMobileMenu);
+         });
+    }
 
     /* ============= STICKY NAVBAR LOGIC ============= */
     const stickyNav = document.querySelector('.hero-nav');

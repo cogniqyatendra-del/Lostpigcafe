@@ -73,6 +73,96 @@ body {
     text-underline-offset: 3px;
 }
 
+/* -------- MOBILE NAV STYLES -------- */
+.mobile-header {
+    background: #F8F8F4;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 200;
+}
+
+.mobile-brand img {
+    height: 40px;
+    width: auto;
+}
+
+.mobile-menu-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #205432;
+    cursor: pointer;
+}
+
+.mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100%;
+    background: #F8F8F4;
+    z-index: 999;
+    padding: 60px 30px;
+    transition: all 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile-sidebar.active {
+    left: 0;
+}
+
+.mobile-menu-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: #205432;
+    cursor: pointer;
+}
+
+.mobile-nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.mobile-nav-links a {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
+
+.mobile-nav-links a:hover {
+    color: #205432;
+}
+
 /* -------- SECOND NAV (OVER HERO) -------- */
 .hero-nav {
     position: absolute;
@@ -929,10 +1019,15 @@ body {
     .catering-grid {
         grid-template-columns: 1fr;
         max-width: 500px;
+        gap: 40px;
     }
 
     .catering-section {
-        padding: 80px 40px;
+        padding: 60px 20px;
+    }
+
+    .catering-title {
+        font-size: 36px;
     }
 }
 
@@ -947,6 +1042,15 @@ body {
 
     .catering-content {
         padding: 25px;
+    }
+
+    .catering-cta-center {
+        flex-direction: column;
+    }
+
+    .catering-btn {
+        width: 100%;
+        text-align: center;
     }
 }
 
@@ -1129,7 +1233,24 @@ body {
 /* -------- RESPONSIVE -------- */
 @media (max-width: 991px) {
     .hero-nav {
-        top: 80px;
+        display: none !important;
+        /* Hide desktop hero nav on mobile */
+    }
+
+    .hero-section {
+        height: 100vh;
+        /* Ensure full viewport height */
+        min-height: 500px;
+    }
+
+    .hero-title {
+        font-size: 60px;
+        /* Smaller title for mobile */
+    }
+
+    .hero-subtitle {
+        font-size: 16px;
+        letter-spacing: 3px;
     }
 
     .brand-title {
@@ -2649,6 +2770,74 @@ header h2 {
     color: #999;
     margin-top: 4px;
     font-weight: 500;
+}
+
+/* -------- GIFT CARDS RESPONSIVE -------- */
+@media (max-width: 991px) {
+    .gift-hero-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+        padding-bottom: 40px;
+    }
+
+    .gift-hero-content {
+        padding-right: 0;
+    }
+
+    .gift-hero-title {
+        font-size: 32px;
+    }
+
+    .gift-hero-image img {
+        max-height: 300px;
+    }
+
+    /* Gift Modal Responsive */
+    .gift-modal-content {
+        grid-template-columns: 1fr;
+    }
+
+    .gift-modal-left {
+        border-radius: 12px 12px 0 0;
+        padding: 30px;
+    }
+
+    .gift-modal-right {
+        padding: 30px;
+    }
+
+    .amount-buttons {
+        gap: 8px;
+    }
+
+    .amount-btn {
+        flex: 1;
+        font-size: 13px;
+        padding: 10px;
+    }
+}
+
+/* -------- MENU PAGE RESPONSIVE -------- */
+@media (max-width: 576px) {
+    .menu-grid {
+        grid-template-columns: 1fr;
+        /* Force 1 column on small mobile */
+        gap: 20px;
+    }
+
+    .menu-card img {
+        height: 250px;
+        /* Slightly taller image on single column */
+    }
+
+    .menu-hero {
+        padding: 100px 20px 40px;
+    }
+
+    .menu-hero h1 {
+        font-size: 36px;
+    }
 }
 
 /* -------- SCROLL REVEAL ANIMATION -------- */

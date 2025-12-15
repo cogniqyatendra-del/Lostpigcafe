@@ -24,8 +24,32 @@
 </head>
 <body>
 
-    <!-- ============= TOP WHITE NAVBAR ============= -->
-    <div class="top-nav container-fluid">
+    <!-- ============= MOBILE HEADER ============= -->
+    <div class="mobile-header d-lg-none">
+        <a href="index.html" class="mobile-brand">
+            <img src="images/logo.png" alt="Lost Pig Cafe">
+        </a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- ============= MOBILE SIDE MENU ============= -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <button class="mobile-menu-close" id="mobileMenuClose">&times;</button>
+        <div class="mobile-nav-links">
+            <a href="index.html">HOME</a>
+            <a href="index.html#about" class="mobile-link">ABOUT</a>
+            <a href="menu.html">MENU</a>
+            <a href="gift-cards.html">GIFT CARDS</a>
+            <a href="index.html#catering" class="mobile-link">CATERING</a>
+            <a href="index.html#contact" class="mobile-link">CONTACT</a>
+        </div>
+    </div>
+
+    <!-- ============= TOP WHITE NAVBAR (Desktop) ============= -->
+    <div class="top-nav container-fluid d-none d-lg-block">
         <div class="container d-flex justify-content-between align-items-center">
 
             <div class="left-links">
@@ -36,7 +60,6 @@
                 <a href="index.html#catering">CATERING</a>
                 <a href="index.html#contact">CONTACT</a>
             </div>
-        </div>
         </div>
     </div>
 
