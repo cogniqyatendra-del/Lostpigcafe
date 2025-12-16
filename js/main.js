@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sendChatBtn = document.querySelector(".chat-input #send-btn"); // Specific selector
         const clearChatBtn = document.querySelector("#clear-chat-btn");
 
-        const API_KEY = "AIzaSyBnBlWmViEYYATMh5KJeTg8o0L7g3aUWHs";
+        const API_KEY = "AIzaSyDBue1r_8KyBaMt2WsMDiRNSXyK4QKbOts";
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
         
         const SYSTEM_INSTRUCTION = `
@@ -549,8 +549,9 @@ If a question is outside your knowledge, respond:
                     chatbox.scrollTo(0, chatbox.scrollHeight);
                 }, 600);
                 
-                // Here you would typically send leadData to your backend
+                // Send lead data to Google Sheets
                 console.log("Lead Captured:", leadData);
+                sendLeadToGoogleSheet(leadData);
                 return;
             }
         };
@@ -758,3 +759,33 @@ If a question is outside your knowledge, respond:
     initChatbot();
 
 });
+
+
+/* ===============================
+   GOOGLE SHEETS LEAD INTEGRATION
+   =============================== */
+
+function sendLeadToGoogleSheet(leadData) {
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxApsqbNJjAkluTR9CO1vqCgMbkoKHurG03oNsIexCGqXpZ8ktQth_77_XMfE-pFzFB/exec";
+
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors", // distinct mode for Google Apps Script
+    headers: {
+      "Content-Type": "text/plain" // explicit simple type
+    },
+    body: JSON.stringify({
+      name: leadData.name || "",
+      contact: leadData.contact || "",
+      source: "Lost Pig Cafe Chatbot"
+    })
+  })
+  .then(() => {
+    // With no-cors, we get an opaque response, so we can't read the JSON.
+    // We assume success if the network call didn't throw.
+    console.log("✅ Lead sent to Google Sheet (no-cors mode)");
+  })
+  .catch(error => {
+    console.error("❌ Network error while saving lead:", error);
+  });
+}
