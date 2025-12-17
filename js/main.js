@@ -365,8 +365,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const sendChatBtn = document.querySelector(".chat-input #send-btn"); // Specific selector
         const clearChatBtn = document.querySelector("#clear-chat-btn");
 
-        const API_KEY = "AIzaSyArLnXdFakNz0ah25tccUEuHoDmYj1mmhU";
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
+        const API_URL = "https://broad-dawn-11fc.cogniq-yatendra.workers.dev"; // Cloudflare Worker URL
+        // const API_KEY = "HIDDEN"; // API Key is now safely stored in Cloudflare Worker environment variables
         
         const SYSTEM_INSTRUCTION = `
 You are an AI customer support chatbot for a US-based café named “Lost Pig Cafe”.
@@ -560,14 +560,23 @@ If a question is outside your knowledge, respond:
             const messageElement = chatElement.querySelector("p");
 
             // Define the request options
+            // Define the request options
             const requestOptions = {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "X-Auth-Key": "LostPigChatbot2025" // Secure password shared with Cloudflare worker
+                },
                 body: JSON.stringify({
-                    contents: [{
+                    messages: [{
                         role: "user",
-                        parts: [{ text: "System Instruction: " + SYSTEM_INSTRUCTION + "\n\nUser Question: " + (userMessage || "User Message") }]
-                    }]
+                        parts: [{ text: "User Question: " + (userMessage || "User Message") }]
+                    }],
+                    systemInstruction: {
+                        parts: [{ text: SYSTEM_INSTRUCTION }]
+                    },
+                    model: "gemini-2.5-flash",
+                    temperature: 0.7
                 })
             }
 
