@@ -575,7 +575,7 @@ If a question is outside your knowledge, respond:
                     systemInstruction: {
                         parts: [{ text: SYSTEM_INSTRUCTION }]
                     },
-                    model: "gemini-1.5-flash",
+                    model: "gemini-2.0-flash-exp",
                     temperature: 0.7
                 })
             }
