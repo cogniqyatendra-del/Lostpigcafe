@@ -448,6 +448,7 @@ Tone & Style Rules:
 • No emojis
 • No technical language
 • No long paragraphs
+• Keep responses extremely concise (under 50 words)
 • Bullet points when helpful
 
 Response Formatting Rules for Menu Questions:
@@ -560,43 +561,64 @@ If a question is outside your knowledge, respond:
                 body: JSON.stringify({
                     message: userMessage || "User Message",
                     systemInstruction: SYSTEM_INSTRUCTION,
-                    model: "gemini-2.5-flash-lite",
+                    model: "gemma-3-4b-it",
                     temperature: 0.7,
-                    maxOutputTokens: 2048
+                    maxOutputTokens: 300
                 })
             }
 
-            try {
-                const response = await fetch(WORKER_URL, requestOptions);
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.error || 'Failed to get response');
-                }
+            const maxRetries = 3;
+            let attempt = 0;
+            let success = false;
 
-                // Get text response from worker
-                const apiResponse = data.message.replace(/\*\*/g, "").trim(); 
-                messageElement.textContent = apiResponse;
-                
-                // Increment message count AFTER successful response
-                if (leadStep === 0) {
-                    messageCount++;
-                    if (messageCount === 3) {
-                        setTimeout(() => {
-                            leadStep = 1;
-                            const proposalLi = createChatLi("By the way, would you like to leave your name and number so we can keep you updated on special offers?", "incoming");
-                            chatbox.appendChild(proposalLi);
-                            chatbox.scrollTo(0, chatbox.scrollHeight);
-                        }, 2000);
+            while (attempt < maxRetries && !success) {
+                try {
+                    attempt++;
+                    const response = await fetch(WORKER_URL, requestOptions);
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        // If it's a 503 (Overloaded) or 429 (Too Many Requests), we retry
+                        if (response.status === 503 || response.status === 429) {
+                            console.warn(`Attempt ${attempt} failed with ${response.status}. Retrying...`);
+                            if (attempt < maxRetries) {
+                                // Exponential backoff: 1000ms, 2000ms, 4000ms
+                                const delay = 1000 * Math.pow(2, attempt - 1);
+                                await new Promise(resolve => setTimeout(resolve, delay));
+                                continue;
+                            }
+                        }
+                        throw new Error(data.error || 'Failed to get response');
                     }
-                }
 
-            } catch (error) {
-                console.error("Error:", error);
-                messageElement.classList.add("error");
-                messageElement.textContent = "Oops! Something went wrong. Please try again.";
-            } finally {
-                chatbox.scrollTo(0, chatbox.scrollHeight);
+                    // Success!
+                    success = true;
+                    // Get text response from worker
+                    const apiResponse = data.message.replace(/\*\*/g, "").trim(); 
+                    messageElement.textContent = apiResponse;
+                    
+                    // Increment message count AFTER successful response
+                    if (leadStep === 0) {
+                        messageCount++;
+                        if (messageCount === 3) {
+                            setTimeout(() => {
+                                leadStep = 1;
+                                const proposalLi = createChatLi("By the way, would you like to leave your name and number so we can keep you updated on special offers?", "incoming");
+                                chatbox.appendChild(proposalLi);
+                                chatbox.scrollTo(0, chatbox.scrollHeight);
+                            }, 2000);
+                        }
+                    }
+
+                } catch (error) {
+                    console.error(`Error on attempt ${attempt}:`, error);
+                    if (attempt === maxRetries) {
+                        messageElement.classList.add("error");
+                        messageElement.textContent = "Oops! The AI is a bit busy right now. Please try again in a moment.";
+                    }
+                } finally {
+                    chatbox.scrollTo(0, chatbox.scrollHeight);
+                }
             }
         }
 

@@ -67,22 +67,25 @@ export default {
         });
       }
 
-      // Default to Gemini 2.5 Flash-Lite if model not specified
-      const model = body.model || 'gemini-2.5-flash-lite';
+      // Default to Gemma 3 12B IT model if not specified
+      const model = body.model || 'gemma-3-12b-it';
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
 
-      // Prepare request payload WITH system instruction
+      // Prepare message with system instruction prepended for Gemma models
+      let messageText = body.message;
+      
+      if (body.systemInstruction) {
+        // For Gemma models, prepend system instruction to the user message
+        messageText = `${body.systemInstruction}\n\nUser: ${body.message}`;
+      }
+
+      // Prepare request payload
       const payload = {
-        system_instruction: {
-          parts: [{
-            text: body.systemInstruction || ""
-          }]
-        },
         contents: [
           {
             parts: [
               {
-                text: body.message
+                text: messageText
               }
             ]
           }
@@ -108,7 +111,10 @@ export default {
 
       // Handle API errors
       if (!response.ok) {
-        return new Response(JSON.stringify({ error: data.error || 'Gemini API error' }), {
+        return new Response(JSON.stringify({ 
+          error: data.error?.message || data.error || 'API error',
+          details: data.error 
+        }), {
           status: response.status,
           headers: {
             'Content-Type': 'application/json',
@@ -136,7 +142,10 @@ export default {
       });
 
     } catch (error) {
-      return new Response(JSON.stringify({ error: 'Internal server error', details: error.message }), {
+      return new Response(JSON.stringify({ 
+        error: 'Internal server error', 
+        details: error.message 
+      }), {
         status: 500,
         headers: {
           'Content-Type': 'application/json',
