@@ -300,7 +300,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ============= AI CHATBOT INTEGRATION ============= */
-    /* ============= AI CHATBOT INTEGRATION ============= */
     const initChatbot = () => {
         // Helper to get time-based greeting
         const getGreeting = () => {
@@ -338,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </li>
                     <div class="chat-suggestions">
                         <button class="suggestion-chip" data-text="Show me the menu">Menu 📜</button>
-                        <button class="suggestion-chip" data-text="What are your opening hours?">Hours 🕒</button>
+                        <button class="suggestion-chip" data-text="What are your opening hours?">Hours 🕐</button>
                         <button class="suggestion-chip" data-text="Where are you located?">Location 📍</button>
                         <button class="suggestion-chip" data-text="What are today's specials?">Specials 🍲</button>
                     </div>
@@ -362,21 +361,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const closeBtn = document.querySelector("#close-chat-btn");
         const chatbox = document.querySelector(".chatbox");
         const chatInput = document.querySelector(".chat-input textarea");
-        const sendChatBtn = document.querySelector(".chat-input #send-btn"); // Specific selector
+        const sendChatBtn = document.querySelector(".chat-input #send-btn");
         const clearChatBtn = document.querySelector("#clear-chat-btn");
 
-        const API_URL = "https://broad-dawn-11fc.cogniq-yatendra.workers.dev"; // Cloudflare Worker URL
-        // const API_KEY = "HIDDEN"; // API Key is now safely stored in Cloudflare Worker environment variables
+        // Your Cloudflare Worker URL
+        const WORKER_URL = "https://withered-base-1bc3.cogniq-yatendra.workers.dev";
         
         const SYSTEM_INSTRUCTION = `
-You are an AI customer support chatbot for a US-based café named “Lost Pig Cafe”.
+You are an AI customer support chatbot for a US-based café named "Lost Pig Cafe".
 
 Your role:
 • Answer customer questions clearly, politely, and accurately
 • Act like a friendly café staff member
 • Be concise, warm, and helpful
 • Never hallucinate or invent information
-• If information is unavailable, say “Please contact the cafe directly for confirmation.”
+• If information is unavailable, say "Please contact the cafe directly for confirmation."
 
 Business Context:
 Lost Pig Cafe is a family-owned café serving breakfast, brunch, lunch, specialty coffee, and baked goods.
@@ -427,7 +426,7 @@ Inventory Rules:
 • Some items may sell out during the day
 • Cinnamon Rolls and Soup of the Day are limited
 • If asked about availability, respond with:
-  “Availability may change daily. Please call the café to confirm today’s stock.”
+  "Availability may change daily. Please call the café to confirm today's stock."
 
 Gift Cards:
 • Gift cards are available
@@ -470,7 +469,7 @@ What you must NOT do:
 
 Fallback Response:
 If a question is outside your knowledge, respond:
-“I recommend contacting Lost Pig Cafe directly for the most accurate information.”
+"I recommend contacting Lost Pig Cafe directly for the most accurate information."
         `;
 
         let userMessage = null; 
@@ -478,16 +477,14 @@ If a question is outside your knowledge, respond:
         
         // Lead Capture State
         let messageCount = 0;
-        let leadStep = 0; // 0: Idle, 1: Proposal, 2: Name, 3: Contact
+        let leadStep = 0;
         let leadData = { name: "", contact: "" };
 
         // 3. Helper Functions
         const createChatLi = (message, className, isHTML = false) => {
-            // Create a <li> with passed message and class
             const chatLi = document.createElement("li");
             chatLi.classList.add("chat", className);
             
-            // Content Wrapper
             let contentHTML = `
                 <div class="msg-content">
                     <p></p>
@@ -497,7 +494,6 @@ If a question is outside your knowledge, respond:
             
             chatLi.innerHTML = contentHTML;
             
-            // Handle element content for typing indicator or specific HTML messages
             if (isHTML || message.includes('<div class="typing-indicator">')) {
                  chatLi.querySelector("p").innerHTML = message;
             } else {
@@ -509,26 +505,24 @@ If a question is outside your knowledge, respond:
         const handleLeadCapture = (userMsg) => {
             const lowerMsg = userMsg.toLowerCase();
             
-            // Step 1: Proposal Response
             if (leadStep === 1) {
                 if (lowerMsg.includes("yes") || lowerMsg.includes("sure") || lowerMsg.includes("okay") || lowerMsg.includes("yep")) {
-                    leadStep = 2; // Move to Name
+                    leadStep = 2;
                     setTimeout(() => {
                         const incomingChatLi = createChatLi("Great! May I have your name?", "incoming");
                         chatbox.appendChild(incomingChatLi);
                         chatbox.scrollTo(0, chatbox.scrollHeight);
                     }, 600);
                 } else {
-                    leadStep = 0; // Cancel (User said no)
-                    generateResponse(createChatLi(userMsg, "outgoing")); // Process as normal query
+                    leadStep = 0;
+                    generateResponse(createChatLi(userMsg, "outgoing"));
                 }
                 return;
             }
 
-            // Step 2: Name Capture
             if (leadStep === 2) {
                 leadData.name = userMsg;
-                leadStep = 3; // Move to Contact
+                leadStep = 3;
                 setTimeout(() => {
                     const incomingChatLi = createChatLi(`Nice to meet you, ${leadData.name}! What's the best phone number or email to reach you?`, "incoming");
                     chatbox.appendChild(incomingChatLi);
@@ -537,19 +531,16 @@ If a question is outside your knowledge, respond:
                 return;
             }
 
-            // Step 3: Contact Capture & Finish
             if (leadStep === 3) {
                 leadData.contact = userMsg;
-                leadStep = 0; // Reset
+                leadStep = 0;
                 setTimeout(() => {
-                    // Aesthetic Conclusion
-                    const thankYouMsg = `<span style="display: block; text-align: center;"><span style="font-size: 2rem; color: #4caf50;">✔</span><br><strong>All set!</strong> I've noted down your details.<br>Is there anything else I can help you with today?</span>`;
+                    const thankYouMsg = `<span style="display: block; text-align: center;"><span style="font-size: 2rem; color: #4caf50;">✓</span><br><strong>All set!</strong> I've noted down your details.<br>Is there anything else I can help you with today?</span>`;
                     const incomingChatLi = createChatLi(thankYouMsg, "incoming", true);
                     chatbox.appendChild(incomingChatLi);
                     chatbox.scrollTo(0, chatbox.scrollHeight);
                 }, 600);
                 
-                // Send lead data to Google Sheets
                 console.log("Lead Captured:", leadData);
                 sendLeadToGoogleSheet(leadData);
                 return;
@@ -559,35 +550,32 @@ If a question is outside your knowledge, respond:
         const generateResponse = async (chatElement) => {
             const messageElement = chatElement.querySelector("p");
 
-            // Define the request options
-            // Define the request options
             const requestOptions = {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
-                    "X-Auth-Key": "LostPigChatbot2025" // Secure password shared with Cloudflare worker
+                    "X-Auth-Key": "LostPigChatbot2025",
+                    "X-Project-ID": "LOST_PIG_CAFE"
                 },
                 body: JSON.stringify({
-                    messages: [{
-                        role: "user",
-                        parts: [{ text: "User Question: " + (userMessage || "User Message") }]
-                    }],
-                    systemInstruction: {
-                        parts: [{ text: SYSTEM_INSTRUCTION }]
-                    },
-                    model: "gemini-2.0-flash-exp",
-                    temperature: 0.7
+                    message: userMessage || "User Message",
+                    systemInstruction: SYSTEM_INSTRUCTION,
+                    model: "gemini-2.5-flash-lite",
+                    temperature: 0.7,
+                    maxOutputTokens: 2048
                 })
             }
 
-            // Send POST request to API, get response and set the reponse as paragraph text
             try {
-                const response = await fetch(API_URL, requestOptions);
+                const response = await fetch(WORKER_URL, requestOptions);
                 const data = await response.json();
-                if (!response.ok) throw new Error(data.error.message);
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to get response');
+                }
 
-                // Get text response
-                const apiResponse = data.candidates[0].content.parts[0].text.replace(/\*\*/g, "").trim(); 
+                // Get text response from worker
+                const apiResponse = data.message.replace(/\*\*/g, "").trim(); 
                 messageElement.textContent = apiResponse;
                 
                 // Increment message count AFTER successful response
@@ -595,15 +583,16 @@ If a question is outside your knowledge, respond:
                     messageCount++;
                     if (messageCount === 3) {
                         setTimeout(() => {
-                            leadStep = 1; // Initiate Lead Capture
+                            leadStep = 1;
                             const proposalLi = createChatLi("By the way, would you like to leave your name and number so we can keep you updated on special offers?", "incoming");
                             chatbox.appendChild(proposalLi);
                             chatbox.scrollTo(0, chatbox.scrollHeight);
-                        }, 2000); // Wait a bit after the answer
+                        }, 2000);
                     }
                 }
 
             } catch (error) {
+                console.error("Error:", error);
                 messageElement.classList.add("error");
                 messageElement.textContent = "Oops! Something went wrong. Please try again.";
             } finally {
@@ -615,19 +604,13 @@ If a question is outside your knowledge, respond:
             userMessage = chatInput.value.trim(); 
             if (!userMessage) return;
 
-            // Clear the input textarea and set its height to default
             chatInput.value = "";
             chatInput.style.height = `${inputInitHeight}px`;
 
-            // Append the user's message to the chatbox
             chatbox.appendChild(createChatLi(userMessage, "outgoing"));
             chatbox.scrollTo(0, chatbox.scrollHeight);
 
-            // Intercept for Lead Capture
             if (leadStep > 0) {
-                // Determine if we should treat this as a "No" for the first step implicitly?
-                // For simplicity, just pass to handleLeadCapture which handles logic.
-                // However, for Step 1, if they ask a question instead of answering yes/no, handleLeadCapture handles the "No" case by default logic currently (anything not yes is no -> generateResponse).
                 handleLeadCapture(userMessage);
                 return;
             }
@@ -644,7 +627,7 @@ If a question is outside your knowledge, respond:
                 else if (lowerMsg.includes('dinner')) category = 'dinner';
                 else if (lowerMsg.includes('coffee')) category = 'coffee';
                 else if (lowerMsg.includes('brunch')) category = 'brunch';
-                else if (lowerMsg.includes('bak') || lowerMsg.includes('pastr') || lowerMsg.includes('bread')) category = 'baked'; // Baked goods
+                else if (lowerMsg.includes('bak') || lowerMsg.includes('pastr') || lowerMsg.includes('bread')) category = 'baked';
 
                 const imageMappings = {
                     breakfast: [
@@ -694,7 +677,7 @@ If a question is outside your knowledge, respond:
                 }
             }
 
-            // Display Typing Indicator while waiting for the response
+            // Display Typing Indicator
             setTimeout(() => {
                 const typingHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
                 const incomingChatLi = createChatLi(typingHTML, "incoming");
@@ -716,13 +699,11 @@ If a question is outside your knowledge, respond:
 
         // 4. Event Listeners
         chatInput.addEventListener("input", () => {
-            // Adjust the height of the input textarea based on its content
             chatInput.style.height = `${inputInitHeight}px`;
             chatInput.style.height = `${chatInput.scrollHeight}px`;
         });
 
         chatInput.addEventListener("keydown", (e) => {
-            // If Enter key is pressed without Shift key and the window width is > 800px, handle the chat
             if (e.key === "Enter" && !e.shiftKey && window.innerWidth > 800) {
                 e.preventDefault();
                 handleChat();
@@ -733,10 +714,8 @@ If a question is outside your knowledge, respond:
         closeBtn.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
         chatbotToggler.addEventListener("click", () => document.body.classList.toggle("show-chatbot"));
         
-        // Initial attachment
         attachSuggestionListeners();
 
-        // Clear Chat Logic
         if (clearChatBtn) {
             clearChatBtn.addEventListener("click", () => {
                 chatbox.innerHTML = `
@@ -748,7 +727,7 @@ If a question is outside your knowledge, respond:
                     </li>
                     <div class="chat-suggestions">
                         <button class="suggestion-chip" data-text="Show me the menu">Menu 📜</button>
-                        <button class="suggestion-chip" data-text="What are your opening hours?">Hours 🕒</button>
+                        <button class="suggestion-chip" data-text="What are your opening hours?">Hours 🕐</button>
                         <button class="suggestion-chip" data-text="Where are you located?">Location 📍</button>
                         <button class="suggestion-chip" data-text="What are today's specials?">Specials 🍲</button>
                     </div>
@@ -758,7 +737,6 @@ If a question is outside your knowledge, respond:
                         <a href="index.html#catering" class="cta-btn"><i class="fas fa-utensils"></i> Catering</a>
                     </div>
                 `;
-                // Re-attach listeners after re-creating HTML
                 attachSuggestionListeners();
             });
         }
@@ -779,9 +757,9 @@ function sendLeadToGoogleSheet(leadData) {
 
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
-    mode: "no-cors", // distinct mode for Google Apps Script
+    mode: "no-cors",
     headers: {
-      "Content-Type": "text/plain" // explicit simple type
+      "Content-Type": "text/plain"
     },
     body: JSON.stringify({
       name: leadData.name || "",
@@ -790,8 +768,6 @@ function sendLeadToGoogleSheet(leadData) {
     })
   })
   .then(() => {
-    // With no-cors, we get an opaque response, so we can't read the JSON.
-    // We assume success if the network call didn't throw.
     console.log("✅ Lead sent to Google Sheet (no-cors mode)");
   })
   .catch(error => {
