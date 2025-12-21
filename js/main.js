@@ -471,6 +471,10 @@ What you must NOT do:
 Fallback Response:
 If a question is outside your knowledge, respond:
 "I recommend contacting Lost Pig Cafe directly for the most accurate information."
+
+IMPORTANT: 
+• Do NOT provide any URL links in your responses (especially not for opening hours).
+• Just state the information directly.
         `;
 
         let userMessage = null; 
@@ -594,8 +598,34 @@ If a question is outside your knowledge, respond:
                     // Success!
                     success = true;
                     // Get text response from worker
-                    const apiResponse = data.message.replace(/\*\*/g, "").trim(); 
-                    messageElement.textContent = apiResponse;
+                    let apiResponse = data.message.trim();
+                    
+                    // Helper to format message (convert markdown links to HTML)
+                    const formatMessage = (text) => {
+                        // 1. Sanitize HTML to prevent XSS (basic)
+                        let tempDiv = document.createElement("div");
+                        tempDiv.textContent = text;
+                        let safeText = tempDiv.innerHTML;
+
+                        // 2. Convert Bold (**text**) to <strong>text</strong>
+                        safeText = safeText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+                        // 3. Convert Markdown Links [text](url) to <a href="url" target="_blank">text</a>
+                        // Regex explanation: \[([^\]]+)\]\(([^)]+)\) captures [text](url)
+                        safeText = safeText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color: #4caf50; text-decoration: underline;">$1</a>');
+
+                        // 4. Convert plain URLs (not in markdown) to clickable links
+                        // This regex looks for http/https URLs that are NOT preceded by ]( (to avoid double linking markdown)
+                        // safeText = safeText.replace(/(?<!\]\()((https?:\/\/[^\s]+))/g, '<a href="$1" target="_blank" style="color: #4caf50; text-decoration: underline;">$1</a>');
+                        // Note: Lookbehind support varies, keeping it simple for now with just markdown links as requested.
+
+                        // 5. Convert newlines to <br>
+                        safeText = safeText.replace(/\n/g, '<br>');
+
+                        return safeText;
+                    };
+
+                    messageElement.innerHTML = formatMessage(apiResponse);
                     
                     // Increment message count AFTER successful response
                     if (leadStep === 0) {
